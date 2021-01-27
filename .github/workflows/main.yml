@@ -38,7 +38,7 @@ jobs:
       run: dotnet build --configuration Release --no-restore /p:DebugType=None
         
     - name: Dotnet publish
-      run: dotnet publish
+      run: dotnet publish CICDExample.csproj
   
     - name: Stop Application Pool
       shell: cmd
