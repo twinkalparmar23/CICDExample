@@ -1,0 +1,47 @@
+name: Development 
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    env:
+      PROJECT_DIRECTORY_PATH: ${{ secrets.PROJECT_DIRECTORY_PATH }}
+      IIS_SERVER_COMPUTER_NAME: ${{ secrets.IIS_SERVER_COMPUTER_NAME }}
+      IIS_WEBSITE_NAME: ${{ secrets.IIS_WEBSITE_NAME }}
+      IIS_SERVER_USERNAME: ${{ secrets.IIS_SERVER_USERNAME }}
+      IIS_SERVER_PASSWORD: ${{ secrets.IIS_SERVER_PASSWORD }}
+      RECYCLE_APP_NAME: ${{ secrets.RECYCLE_APP_NAME }}
+      WEBSITE_CONTENT_PATH: ${{ secrets.WEBSITE_CONTENT_PATH }}
+    
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+   
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~\.nuget\packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**\packages.lock.json') }}    
+
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration debug --no-restore
+      
+    - name: Dotnet publish
+      run: dotnet publish CICDExample.csproj --configuration Debug
+      
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v2
+      with: 
+        name: DevBuildArtifact
+        path: D:\a\CICDExample\CICDExample\bin\Debug\net5.0\publish\
