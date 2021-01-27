@@ -38,7 +38,13 @@ jobs:
       run: dotnet build --configuration Release --no-restore /p:DebugType=None
         
     - name: Dotnet publish
-      run: dotnet publish CICDExample.csproj
+      run: dotnet publish CICDExample.csproj --configuration Release
+    
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v2
+      with: 
+        name: MainBuildArtifact
+        path: D:\a\CICDExample\CICDExample\bin\Release\net5.0\publish\
   
     - name: Stop Application Pool
       shell: cmd
