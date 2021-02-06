@@ -8,9 +8,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    
-    - name: Checkout source code
-      uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+   
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: ~\.nuget\packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**\packages.lock.json') }}    
+
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: dotnet build --configuration Release --no-restore /p:DebugType=None
+        
+    - name: Dotnet publish
+      run: dotnet publish CICDExample.csproj
 
     - name: Generate deployment package
       run: zip -r deploy.zip . -x '*.git*'
