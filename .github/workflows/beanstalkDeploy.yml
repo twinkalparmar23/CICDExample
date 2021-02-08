@@ -32,14 +32,9 @@ jobs:
 
     - name: Generate deployment package
       run: |
-        cd site
         zip -r deploy.zip ../site -x '*.git*'
-        echo "inside site folder"
         ls
         pwd
-        cd ..
-        echo "outside site folder"
-        ls
       
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v14
