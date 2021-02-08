@@ -8,7 +8,7 @@ env:
     
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
       
@@ -28,14 +28,20 @@ jobs:
       run: dotnet build --configuration Release --no-restore /p:DebugType=None
         
     - name: Dotnet publish
-      run: dotnet publish -o site
+      run: dotnet publish --no-restore
 
     - name: Generate deployment package
-      run: |
-        zip -r deploy.zip . ../site -x '*.git*'
-        ls
-        pwd
+    - uses: papeloto/action-zip@v1
+      with:
+        files: publish/ aws-windows-deployment-manifest.json
+        recursive: true
+        dest: site.zip
       
+    - uses: actions/upload-artifact@v1
+      with:
+        name: my-artifact
+        path: ${{ github.workspace }}/site.zip
+    
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v14
       with:
@@ -45,4 +51,4 @@ jobs:
         environment_name: Mysampleapp-env
         version_label: "Ver-${{ github.sha }}"
         region: us-east-1
-        deployment_package: "/home/runner/work/CICDExample/CICDExample/site/deploy.zip"
+        deployment_package: site.zip
