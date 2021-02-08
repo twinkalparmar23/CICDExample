@@ -33,9 +33,11 @@ jobs:
     - name: Generate deployment package
       run: |
         cd site
-        zip -r ${{ env.DEPLOY-PACKAGE-NAME }} . -x '*.git*'
+        zip -r deploy.zip ../site -x '*.git*'
+        echo "inside site folder"
         ls
         cd ..
+        echo "outside site folder"
         ls
       
     - name: Deploy to EB
@@ -47,4 +49,4 @@ jobs:
         environment_name: Mysampleapp-env
         version_label: "Ver-${{ github.sha }}"
         region: us-east-1
-        deployment_package: ${{ env.DEPLOY-PACKAGE-NAME }}
+        deployment_package: deploy.zip
