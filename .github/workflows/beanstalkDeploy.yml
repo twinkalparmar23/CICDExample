@@ -36,6 +36,7 @@ jobs:
         zip -r deploy.zip ../site -x '*.git*'
         echo "inside site folder"
         ls
+        pwd
         cd ..
         echo "outside site folder"
         ls
