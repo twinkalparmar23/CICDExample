@@ -33,7 +33,9 @@ jobs:
     - name: Generate deployment package
       run: |
         cd site
-        zip -r ${{ env.DEPLOY-PACKAGE-NAME }} ../site -x '*.git*'
+        zip -r ${{ env.DEPLOY-PACKAGE-NAME }} . -x '*.git*'
+        ls
+        cd ..
         ls
       
     - name: Deploy to EB
