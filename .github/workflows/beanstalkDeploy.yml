@@ -2,7 +2,9 @@ name: Deploy master
 on:
   push:
     branches: [ main ]
-    
+
+inputs:
+  DEPLOY-PACKAGE-NAME: "Application-${{ github.sha }}.zip"   
     
 jobs:
   build:
@@ -26,10 +28,12 @@ jobs:
       run: dotnet build --configuration Release --no-restore /p:DebugType=None
         
     - name: Dotnet publish
-      run: dotnet publish CICDExample.csproj
+      run: dotnet publish -o site
 
     - name: Generate deployment package
-      run: zip -r deploy.zip . -x '*.git*'
+      run: |
+        cd site
+        zip -r ${{ inputs.DEPLOY-PACKAGE-NAME }} . -x '*.git*'
       
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v14
@@ -38,6 +42,6 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: MySampleApp
         environment_name: Mysampleapp-env
-        version_label: 123456
+        version_label: "Ver-${{ github.sha }}"
         region: us-east-1
-        deployment_package: deploy.zip
+        deployment_package: "${{ inputs.DEPLOY-PACKAGE-NAME }}.zip"
