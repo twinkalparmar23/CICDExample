@@ -28,12 +28,12 @@ jobs:
       run: dotnet build --configuration Release --no-restore /p:DebugType=None
         
     - name: Dotnet publish 
-      run: dotnet publish CICDExample.csproj
+      run: dotnet publish -o bundle
 
     - name: Generate deployment package
       uses: papeloto/action-zip@v1
       with:
-        files: D:\a\CICDExample\CICDExample\bin\Debug\net5.0\publish\ aws-windows-deployment-manifest.json
+        files: D:\a\CICDExample\CICDExample\bundle\
         recursive: true
         dest: site.zip
       
