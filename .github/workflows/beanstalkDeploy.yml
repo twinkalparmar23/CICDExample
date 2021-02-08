@@ -32,7 +32,9 @@ jobs:
 
     - name: Generate deployment package
       run: |
+        cd site
         zip -r ${{ env.DEPLOY-PACKAGE-NAME }} ../site -x '*.git*'
+        ls
       
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v14
