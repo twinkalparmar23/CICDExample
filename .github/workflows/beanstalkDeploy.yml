@@ -33,7 +33,7 @@ jobs:
     - name: Generate deployment package
       run: |
         cd site
-        zip -r ${{ inputs.DEPLOY-PACKAGE-NAME }} . -x '*.git*'
+        zip -r ${{ env.DEPLOY-PACKAGE-NAME }} . -x '*.git*'
       
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v14
@@ -44,4 +44,4 @@ jobs:
         environment_name: Mysampleapp-env
         version_label: "Ver-${{ github.sha }}"
         region: us-east-1
-        deployment_package: ${{ inputs.DEPLOY-PACKAGE-NAME }}
+        deployment_package: ${{ env.DEPLOY-PACKAGE-NAME }}
