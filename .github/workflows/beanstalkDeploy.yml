@@ -42,5 +42,15 @@ jobs:
       with:
         name: my-artifact
         path: ${{ github.workspace }}\site.zip
-    
+        key:  
+    - name: Deploy to EB
+      uses: einaregilsson/beanstalk-deploy@v14
+      with:
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: MySampleApp
+        environment_name: Mysampleapp-env
+        version_label: "Ver-${{ github.sha }}"
+        region: us-east-1
+        deployment_package: site.zip
 
