@@ -33,7 +33,7 @@ jobs:
     - name: Generate deployment package
       uses: papeloto/action-zip@v1
       with:
-        files: D:\a\CICDExample\CICDExample\bundle\
+        files: bundle/
         recursive: true
         dest: site.zip
       
