@@ -3,7 +3,7 @@ on:
   push:
     branches: [ main ]
 
-inputs:
+env:
   DEPLOY-PACKAGE-NAME: "Application-${{ github.sha }}.zip"   
     
 jobs:
@@ -44,4 +44,4 @@ jobs:
         environment_name: Mysampleapp-env
         version_label: "Ver-${{ github.sha }}"
         region: us-east-1
-        deployment_package: "${{ inputs.DEPLOY-PACKAGE-NAME }}.zip"
+        deployment_package: ${{ inputs.DEPLOY-PACKAGE-NAME }}
