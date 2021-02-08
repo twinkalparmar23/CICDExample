@@ -42,7 +42,7 @@ jobs:
       with:
         name: my-artifact
         path: ${{ github.workspace }}\site.zip
-        key:  
+        
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v14
       with:
