@@ -50,4 +50,4 @@ jobs:
         environment_name: Mysampleapp-env
         version_label: "Ver-${{ github.sha }}"
         region: us-east-1
-        deployment_package: deploy.zip
+        deployment_package: "/home/runner/work/CICDExample/CICDExample/site/deploy.zip"
