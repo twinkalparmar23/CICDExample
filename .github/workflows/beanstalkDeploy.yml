@@ -28,20 +28,27 @@ jobs:
       run: dotnet build --configuration Release --no-restore /p:DebugType=None
         
     - name: Dotnet publish 
-      run: dotnet publish -o bundle
+      run: dotnet publish -o site
 
+    - name: Generate site folder zip
+      uses: papeloto/action-zip@v1
+      with:
+        files: site/
+        recursive: true
+        dest: site.zip 
+        
     - name: Generate deployment package
       uses: papeloto/action-zip@v1
       with:
-        files: bundle/
+        files: site.zip aws-windows-deployment-manifest.json
         recursive: true
-        dest: site.zip
-      
+        dest: dotnet-core-tutorial.zip
+              
     - name: Upload build artifact
       uses: actions/upload-artifact@v2
       with:
         name: my-artifact
-        path: ${{ github.workspace }}\site.zip
+        path: ${{ github.workspace }}\dotnet-core-tutorial.zip
         
     - name: Deploy to EB
       uses: einaregilsson/beanstalk-deploy@v14
@@ -52,5 +59,4 @@ jobs:
         environment_name: Mysampleapp-env
         version_label: "Ver-${{ github.sha }}"
         region: us-east-1
-        deployment_package: site.zip
-
+        deployment_package: dotnet-core-tutorial.zip
